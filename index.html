@@ -3,25 +3,32 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Discord Music Dashboard</title>
+<title>Discord Music Control</title>
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<h1>Upload MP3 / Send Message</h1>
-<form id="uploadForm" enctype="multipart/form-data">
-    <input type="text" name="name" placeholder="Nama" required>
-    <input type="email" name="email" placeholder="Gmail" required>
-    <input type="text" name="discord" placeholder="Discord Tag" required>
-    <input type="text" name="subject" placeholder="Subjek">
-    <select name="category">
-        <option value="General">General</option>
-        <option value="Music">Music</option>
-        <option value="Feedback">Feedback</option>
-    </select>
-    <textarea name="message" placeholder="Pesan"></textarea>
-    <input type="file" name="mp3">
-    <button type="submit">Send / Upload</button>
-</form>
+<h1>Discord Music Control</h1>
+
+<div class="controls">
+    <button id="play">▶️ Play</button>
+    <button id="pause">⏸️ Pause</button>
+    <button id="skip">⏭️ Skip</button>
+    <input type="range" id="volume" min="0" max="100" value="50">
+    <span id="volumeValue">50%</span>
+</div>
+
+<div class="progress">
+    <div id="progressBar"></div>
+</div>
+<div class="time">
+    <span id="currentTime">00:00</span> / <span id="totalTime">00:00</span>
+</div>
+
+<div class="queue">
+    <h3>Queue</h3>
+    <ul id="queueList"></ul>
+</div>
+
 <script src="script.js"></script>
 </body>
-  </html>
+</html>
