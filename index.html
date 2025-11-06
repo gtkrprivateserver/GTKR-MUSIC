@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Discord Music Dashboard</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<h1>Upload MP3 / Send Message</h1>
+<form id="uploadForm" enctype="multipart/form-data">
+    <input type="text" name="name" placeholder="Nama" required>
+    <input type="email" name="email" placeholder="Gmail" required>
+    <input type="text" name="discord" placeholder="Discord Tag" required>
+    <input type="text" name="subject" placeholder="Subjek">
+    <select name="category">
+        <option value="General">General</option>
+        <option value="Music">Music</option>
+        <option value="Feedback">Feedback</option>
+    </select>
+    <textarea name="message" placeholder="Pesan"></textarea>
+    <input type="file" name="mp3">
+    <button type="submit">Send / Upload</button>
+</form>
+<script src="script.js"></script>
+</body>
+  </html>
