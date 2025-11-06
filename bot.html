@@ -52,3 +52,29 @@ client.on('messageCreate', async message => {
 });
 
 client.login(process.env.DISCORD_TOKEN);
+
+const express = require('express');
+const multer = require('multer');
+const app = express();
+const upload = multer({ dest: 'uploads/' });
+
+app.use(express.static('dashboard'));
+
+app.post('/upload', upload.single('mp3'), (req, res) => {
+    // Data form
+    const { name, email, discord, subject, category, message } = req.body;
+
+    // Kirim webhook ke Discord (opsional)
+    const fetch = require('node-fetch');
+    fetch(process.env.WEBHOOK_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            content: `**${name}** (${discord}, ${email}) sent a message\n**Subject:** ${subject}\n**Category:** ${category}\n**Message:** ${message}`
+        })
+    });
+
+    res.json({ message: 'Uploaded successfully!' });
+});
+
+app.listen(3000, () => console.log('Dashboard running on http://localhost:3000'));
