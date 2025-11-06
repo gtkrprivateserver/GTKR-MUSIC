@@ -1,0 +1,54 @@
+const { Client, GatewayIntentBits } = require('discord.js');
+const { joinVoiceChannel, createAudioPlayer, createAudioResource } = require('@discordjs/voice');
+const fs = require('fs');
+require('dotenv').config();
+
+const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildVoiceStates, GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent] });
+const player = createAudioPlayer();
+let currentResource = null;
+
+client.once('ready', () => {
+    console.log(`Bot online: ${client.user.tag}`);
+});
+
+client.on('messageCreate', async message => {
+    if (!message.guild) return;
+
+    const args = message.content.split(' ');
+    const command = args.shift().toLowerCase();
+
+    if (command === '!join') {
+        const channel = message.member.voice.channel;
+        if (channel) {
+            joinVoiceChannel({
+                channelId: channel.id,
+                guildId: message.guild.id,
+                adapterCreator: message.guild.voiceAdapterCreator
+            });
+            message.reply('Joined your voice channel!');
+        }
+    }
+
+    if (command === '!play') {
+        const fileName = args[0];
+        const path = `./uploads/${fileName}`;
+        if (fs.existsSync(path)) {
+            currentResource = createAudioResource(path);
+            player.play(currentResource);
+            message.reply(`Playing ${fileName}`);
+            const connection = joinVoiceChannel({
+                channelId: message.member.voice.channel.id,
+                guildId: message.guild.id,
+                adapterCreator: message.guild.voiceAdapterCreator
+            });
+            connection.subscribe(player);
+        } else message.reply('File not found!');
+    }
+
+    if (command === '!stop') {
+        player.stop();
+        message.reply('Stopped!');
+    }
+});
+
+client.login(process.env.DISCORD_TOKEN);
