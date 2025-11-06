@@ -1,0 +1,31 @@
+name: Deploy Discord Bot to Replit
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch: {}
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Push to Replit GitHub
+        env:
+          REPLIT_REPO: ${{ secrets.REPLIT_REPO }}
+          REPLIT_TOKEN: ${{ secrets.REPLIT_TOKEN }}
+        run: |
+          git remote add replit https://x-access-token:${REPLIT_TOKEN}@github.com/${REPLIT_REPO}.git
+          git push replit main --force
