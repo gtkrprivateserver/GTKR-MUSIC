@@ -1,0 +1,79 @@
+discord-music-bot/ ├─ .github/ │  └─ workflows/ │     └─ bot.yml ├─ public/ │  └─ index.html ├─ queue.js ├─ index.js ├─ package.json └─ .env.example
+
+// .github/workflows/bot.yml name: Discord Bot 24/7
+
+on: push: branches: [main] schedule: - cron: '*/5 * * * *'
+
+jobs: run-bot: runs-on: ubuntu-latest
+
+steps:
+  - uses: actions/checkout@v3
+  - uses: actions/setup-node@v3
+    with:
+      node-version: '20'
+  - run: npm install
+  - run: echo "DISCORD_TOKEN=${{ secrets.DISCORD_TOKEN }}" > .env
+  - run: nohup npm start &
+
+// package.json { "name": "discord-music-bot", "version": "1.0.0", "main": "index.js", "type": "module", "scripts": { "start": "node index.js" }, "dependencies": { "discord.js": "^14.17.0", "@discordjs/voice": "^0.14.0", "ffmpeg-static": "^4.4.0", "ytdl-core": "^4.11.0", "express": "^4.18.2", "dotenv": "^16.3.1", "axios": "^1.7.2" } }
+
+// .env.example DISCORD_TOKEN=MTQyNTI0ODE0NDQwNDM4NTgxMg.GzegAW.5UJwL4PkdkOffrwj8rqaX4GTgq8xldNUFpKbQc
+
+// queue.js export class MusicQueue { constructor() { this.songs = []; } add(song) { this.songs.push(song); } next() { return this.songs.shift(); } list() { return this.songs; } }
+
+// index.js import 'dotenv/config'; import { Client, GatewayIntentBits } from 'discord.js'; import { joinVoiceChannel, createAudioPlayer, createAudioResource, AudioPlayerStatus, NoSubscriberBehavior } from '@discordjs/voice'; import ytdl from 'ytdl-core'; import express from 'express'; import { MusicQueue } from './queue.js'; import axios from 'axios';
+
+const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildVoiceStates, GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent] }); const queue = new MusicQueue(); const player = createAudioPlayer({ behaviors: { noSubscriber: NoSubscriberBehavior.Pause } }); const app = express(); const PORT = process.env.PORT || 3000;
+
+client.on('ready', () => console.log(Logged in as ${client.user.tag}));
+
+client.on('messageCreate', async message => { if (!message.guild || message.author.bot) return; const args = message.content.split(' '); const command = args.shift().toLowerCase();
+
+if (command === '!play') {
+    const url = args[0];
+    if (!url) return message.reply('Provide a YouTube URL!');
+    queue.add(url);
+    message.reply(`Added to queue: ${url}`);
+    playNext(message);
+}
+
+if (command === '!skip') {
+    player.stop();
+    message.reply('Skipped!');
+}
+
+if (command === '!queue') {
+    const list = queue.list().join('\n') || 'Queue empty!';
+    message.reply(`Queue:\n${list}`);
+}
+
+});
+
+function playNext(message) { if (!queue.list().length) return; const channel = message.member.voice.channel; if (!channel) return message.reply('Join a voice channel first!');
+
+const connection = joinVoiceChannel({ channelId: channel.id, guildId: message.guild.id, adapterCreator: message.guild.voiceAdapterCreator });
+const url = queue.next();
+const stream = ytdl(url, { filter: 'audioonly' });
+const resource = createAudioResource(stream);
+
+player.play(resource);
+connection.subscribe(player);
+
+player.once(AudioPlayerStatus.Idle, () => { if (queue.list().length) playNext(message); });
+
+}
+
+app.get('/', (req, res) => res.send('<h1>Discord Music Bot 24/7 is running!</h1>')); setInterval(() => axios.get(http://localhost:${PORT}).catch(() => {}), 5601000); app.listen(PORT, () => console.log(Web server running on port ${PORT})); client.login(process.env.DISCORD_TOKEN);
+
+// public/index.html
+
+<!DOCTYPE html><html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Discord Music Bot 24/7</title>
+</head>
+<body>
+<h1>Discord Music Bot is Online!</h1>
+<p>Commands in Discord: !play, !skip, !queue</p>
+</body>
+</html>
