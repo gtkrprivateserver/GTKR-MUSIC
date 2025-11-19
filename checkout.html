@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Checkout — ONEDEV TopUp</title>
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+  <main class="container">
+    <div class="card checkout">
+      <h2>Checkout</h2>
+      <form id="checkoutForm">
+        <div class="form-row">
+          <label>Jenis:</label>
+          <input type="text" id="itemType" readonly>
+        </div>
+        <div class="form-row">
+          <label>Jumlah:</label>
+          <input type="text" id="itemAmount" readonly>
+        </div>
+        <div class="form-row">
+          <label>Nama Player/ID:</label>
+          <input type="text" id="playerName" required>
+        </div>
+        <div class="form-row">
+          <label>Metode Pembayaran:</label>
+          <select id="paymentMethod">
+            <option value="manual">Manual (transfer)</option>
+            <option value="xendit">Xendit</option>
+            <option value="midtrans">Midtrans</option>
+          </select>
+        </div>
+        <div class="form-row">
+          <button type="submit" id="payBtn">Bayar Sekarang</button>
+        </div>
+      </form>
+    </div>
+  </main>
+
+  <script src="assets/js/main.js" defer></script>
+  <script src="assets/js/webhook.js" defer></script>
+</body>
+</html>
