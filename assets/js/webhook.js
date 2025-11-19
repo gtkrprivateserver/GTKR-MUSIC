@@ -3,26 +3,30 @@
   // ================================
   //  MASUKKAN WEBHOOK DISCORD ANDA
   // ================================
-  const WEBHOOK_URL = "https://discord.com/api/webhooks/1434704722467618889/iHN5u7vAzvScV3oRTHqWNiEcoiwK-E1Lng3gYc9dYv8cJPp9T_JsWja7tnYnZ3u-orH4"; 
+  const WEBHOOK_URL = "https://discord.com/api/webhooks/1434704722467618889/iHN5u7vAzvScV3oRTHqWNiEcoiwK-E1Lng3gYc9dYv8cJPp9T_JsWja7tnYnZ3u-orH4";
 
 
-  // Format embed Discord
-  function buildEmbed(order){
+  // Membuat embed Discord
+  function buildEmbed(order) {
     return {
       username: "TopUp Bot",
       avatar_url: "https://i.imgur.com/zv3YvQh.png",
       embeds: [
         {
-          title: "🛒 Pembelian Baru!",
+          title: "🛒 Pesanan Baru Masuk!",
           color: 16705372,
           fields: [
-            { name: "👤 Username", value: order.username || "-", inline: true },
-            { name: "📦 Paket", value: order.package || "-", inline: true },
-            { name: "💳 Harga", value: "Rp " + order.price || "-", inline: true },
-            { name: "📱 ID", value: order.userid || "-", inline: false },
+            { name: "👤 Nama Player", value: order.player || "-", inline: true },
+            { name: "🆔 ID", value: order.userid || "-", inline: true },
+
+            { name: "📦 Jenis", value: order.type || "-", inline: true },
+            { name: "🔢 Jumlah", value: order.amount || "-", inline: true },
+
+            { name: "💳 Metode Pembayaran", value: order.payment || "-", inline: false },
+            { name: "💰 Total Harga", value: "Rp " + order.price || "-", inline: false },
           ],
           footer: {
-            text: "Notifikasi Otomatis TopUp",
+            text: "Notifikasi Otomatis TopUp"
           },
           timestamp: new Date().toISOString()
         }
@@ -30,9 +34,11 @@
     };
   }
 
+
+  // Mengirim ke webhook
   async function send(order) {
     if (!WEBHOOK_URL) {
-      console.warn("❌ WEBHOOK belum di-set!");
+      console.warn("❌ WEBHOOK belum diisi!");
       return { ok: false };
     }
 
@@ -43,10 +49,10 @@
         body: JSON.stringify(buildEmbed(order))
       });
 
-      console.log("Webhook sent:", result.status);
+      console.log("Webhook terkirim:", result.status);
       return result;
     } catch (err) {
-      console.error("Gagal kirim webhook:", err);
+      console.error("Gagal mengirim webhook:", err);
       return { ok: false };
     }
   }
