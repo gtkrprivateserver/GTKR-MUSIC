@@ -1,34 +1,45 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html lang="id">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Discord Music Control</title>
-<link rel="stylesheet" href="style.css">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ONEDEV TopUp — Gems & Premium World Lock</title>
+  <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
-<h1>Discord Music Control</h1>
+  <header class="hero">
+    <div class="container">
+      <h1 class="brand">ONEDEV TopUp</h1>
+      <p class="tag">Top up Gems & Premium World Lock — cepat, aman, dan profesional</p>
+    </div>
+  </header>
 
-<div class="controls">
-    <button id="play">▶️ Play</button>
-    <button id="pause">⏸️ Pause</button>
-    <button id="skip">⏭️ Skip</button>
-    <input type="range" id="volume" min="0" max="100" value="50">
-    <span id="volumeValue">50%</span>
-</div>
+  <main class="container grid">
+    <section class="card">
+      <h2>Top Up Gems</h2>
+      <p>Pilih paket gems dan lanjut ke pembayaran.</p>
+      <div class="packages">
+        <button class="pkg" data-type="gems" data-amount="50">50 Gems — Rp 10.000</button>
+        <button class="pkg" data-type="gems" data-amount="120">120 Gems — Rp 20.000</button>
+        <button class="pkg" data-type="gems" data-amount="300">300 Gems — Rp 45.000</button>
+      </div>
+    </section>
 
-<div class="progress">
-    <div id="progressBar"></div>
-</div>
-<div class="time">
-    <span id="currentTime">00:00</span> / <span id="totalTime">00:00</span>
-</div>
+    <section class="card">
+      <h2>Premium World Lock</h2>
+      <p>Gunakan World Lock premium untuk fitur eksklusif.</p>
+      <div class="packages">
+        <button class="pkg" data-type="pwl" data-amount="1">1 PWL — Rp 5.000</button>
+        <button class="pkg" data-type="pwl" data-amount="5">5 PWL — Rp 22.000</button>
+        <button class="pkg" data-type="pwl" data-amount="10">10 PWL — Rp 40.000</button>
+      </div>
+    </section>
+  </main>
 
-<div class="queue">
-    <h3>Queue</h3>
-    <ul id="queueList"></ul>
-</div>
+  <footer class="footer">
+    <div class="container">© ONEDEV — All rights reserved</div>
+  </footer>
 
-<script src="script.js"></script>
+  <script src="assets/js/main.js" defer></script>
 </body>
 </html>
